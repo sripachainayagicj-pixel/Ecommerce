@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Products — Shop</title>
+  <link rel="stylesheet" href="products.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="logo" href="#">ShopLogo</a>
+      <div class="search-wrap">
+        <input id="searchInput" class="search-input" type="search" placeholder="Search products..." aria-label="Search products">
+      </div>
+      <div class="nav-actions">
+        <div class="cart" id="cartBtn" aria-live="polite">
+          🛒 <span id="cartCount">0</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="controls">
+    <div class="control-group">
+      <label for="categorySelect">Category</label>
+      <select id="categorySelect">
+        <option value="all">All Categories</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Books">Books</option>
+        <option value="Home">Home</option>
+        <option value="Sports">Sports</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="sortSelect">Sort By</label>
+      <select id="sortSelect">
+        <option value="default">Recommended</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name-asc">Name: A-Z</option>
+        <option value="name-desc">Name: Z-A</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="main">
+    <div id="spinner" class="spinner hidden" aria-hidden="true"></div>
+    <div id="errorMessage" class="error-message hidden" role="alert"></div>
+
+    <section id="productsGrid" class="products-grid" aria-live="polite"></section>
+
+    <div class="pagination">
+      <button id="prevBtn" class="btn" disabled>Previous</button>
+      <span id="pageInfo">Page 1</span>
+      <button id="nextBtn" class="btn">Next</button>
+    </div>
+  </main>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="products.js" defer></script>
+</body>
+</html>

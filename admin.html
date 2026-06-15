@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - ShopHub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-brand">
+        <h1>ShopHub - Admin</h1>
+      </div>
+      <ul class="navbar-menu">
+        <li><a href="index.html">Home</a></li>
+        <li id="adminLogout" style="display: none;">
+          <a href="#" onclick="logout()">Logout</a>
+        </li>
+        <li id="navUser">
+          <a href="login.html">Login</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Admin Section -->
+  <section class="admin-section">
+    <div class="container">
+      <div id="notAuthorized" class="auth-message" style="display: none;">
+        <h2>❌ Access Denied</h2>
+        <p>You must be an admin to access this page.</p>
+        <a href="login.html" class="btn btn-primary">Go to Login</a>
+      </div>
+
+      <div id="adminPanel" style="display: none;">
+        <h2>Admin Dashboard</h2>
+
+        <!-- Tabs -->
+        <div class="admin-tabs">
+          <button class="tab-button active" onclick="switchTab('products')">
+            Manage Products
+          </button>
+          <button class="tab-button" onclick="switchTab('orders')">
+            View Orders
+          </button>
+        </div>
+
+        <!-- Products Management Tab -->
+        <div id="productsTab" class="tab-content active">
+          <h3>Products Management</h3>
+
+          <!-- Add Product Form -->
+          <div class="admin-form">
+            <h4>Add New Product</h4>
+            <form id="addProductForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Product Name</label>
+                  <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                  <label>Price</label>
+                  <input type="number" id="productPrice" step="0.01" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="productDescription" required></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Category</label>
+                  <select id="productCategory" required>
+                    <option value="">Select Category</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Books">Books</option>
+                    <option value="Home">Home</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Stock Quantity</label>
+                  <input type="number" id="productStock" min="0" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Image URL</label>
+                <input type="url" id="productImage" placeholder="https://example.com/image.jpg">
+              </div>
+              <button type="submit" class="btn btn-primary">Add Product</button>
+            </form>
+          </div>
+
+          <!-- Products List -->
+          <div class="admin-table">
+            <h4>Products List</h4>
+            <table id="productsTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <!-- Products loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Orders Management Tab -->
+        <div id="ordersTab" class="tab-content">
+          <h3>Orders Management</h3>
+          <div class="admin-table">
+            <h4>All Orders</h4>
+            <table id="ordersTable">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>User</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <!-- Orders loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Edit Product Modal -->
+  <div id="editProductModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeEditModal()">&times;</span>
+      <h2>Edit Product</h2>
+      <form id="editProductForm">
+        <input type="hidden" id="editProductId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" id="editProductName" required>
+          </div>
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" id="editProductPrice" step="0.01" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="editProductDescription" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="editProductCategory" required>
+              <option value="Electronics">Electronics</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Books">Books</option>
+              <option value="Home">Home</option>
+              <option value="Sports">Sports</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stock</label>
+            <input type="number" id="editProductStock" min="0" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Product</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Status Modal -->
+  <div id="orderStatusModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeOrderModal()">&times;</span>
+      <h2>Update Order Status</h2>
+      <form id="updateOrderForm">
+        <input type="hidden" id="updateOrderId">
+        <div class="form-group">
+          <label>Order Status</label>
+          <select id="newOrderStatus" required>
+            <option value="Pending">Pending</option>
+            <option value="Processing">Processing</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="orderNotes" placeholder="Add any notes..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Status</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 ShopHub Admin Panel. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
